@@ -23,11 +23,10 @@ class Finance_app(QWidget):
         self.button4.clicked.connect(self.delete_expense)
         self.button4.setObjectName("button4")
         self.line3 = QLineEdit(self)
-        self.line3.setPlaceholderText("Type ID to Delete Expense")
+        self.line3.setPlaceholderText("Type ID to Delete Expense Or Change expense")
         self.label = QLabel("Save Your Expenses", self)
         self.database_sql()
         self.initUI()
-
     def initUI(self):
         self.setGeometry(430, 100, 550, 650)
         vbox = QVBoxLayout()
@@ -64,6 +63,7 @@ class Finance_app(QWidget):
         font-family:"Verdana";
         }
         """)
+
     def database_sql(self):
         self.conn = sqlite3.connect('finance.db')
         self.cursor = self.conn.cursor()
@@ -81,10 +81,11 @@ class Finance_app(QWidget):
             self.cursor.execute("INSERT INTO expenses  (item_name,amount) values(?,?)", (item, expense))
             self.conn.commit()
             self.label.setText("Saved your expenses successfully")
-            self.line2.clear()
+            self.line3.clear()
             self.line.clear()
         else:
             self.label.setText("Enter your expenses information")
+
     def show_expense(self):
         self.cursor.execute("SELECT * FROM expenses")
         sql = self.cursor.fetchall()
@@ -114,10 +115,10 @@ class Finance_app(QWidget):
             no_data_msg.exec()
 
     def change_expense(self):
-        text = self.line2.text().lower()
+        text = self.line3.text().lower()
         text2 = self.line.text().lower()
         if text and text2:
-            self.cursor.execute("UPDATE expenses SET amount = ? WHERE item_name = ?", (text2, text))
+            self.cursor.execute("UPDATE expenses SET amount = ? WHERE item_id = ?", (text2, text))
             self.label.setText("Changed your expenses successfully")
             self.conn.commit()
             self.line.clear()
