@@ -5,7 +5,7 @@ from PyQt6.QtWidgets import QApplication, QWidget, QPushButton, QVBoxLayout, QLi
 class Finance_app(QWidget):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("YOU ARE BROKE MATE WHAT FINANCE LMAO")
+        self.setWindowTitle("Expense Tracker")
         self.button = QPushButton("save expense", self)
         self.button.setObjectName("button")
         self.line = QLineEdit(self)
@@ -95,7 +95,7 @@ class Finance_app(QWidget):
                 expense_list.append(f"ID : {item_id}---{item} ${expense} : {date}")
             final_expense = "\n".join(expense_list)
             msg = QMessageBox()
-            msg.setWindowTitle("fucking broke ass boi")
+            msg.setWindowTitle("Your List")
             msg.setText(final_expense)
             msg.setStyleSheet("""
                             background-color: #49fabb;
