@@ -70,18 +70,18 @@ class Finance_app(QWidget):
         self.cursor.execute("""CREATE TABLE IF NOT EXISTS expenses(
                 item_id integer PRIMARY KEY AUTOINCREMENT,
                 item_name TEXT,
-                amount DECIMAL
+                amount DECIMAL,
+                date DATETIME DEFAULT (datetime('now','localtime'))
                 )""")
         self.conn.commit()
-
     def save_item(self):
         item = self.line2.text().lower()
-        expense = self.line.text().lower()
+        expense = self.line.text()
         if item and expense:
             self.cursor.execute("INSERT INTO expenses  (item_name,amount) values(?,?)", (item, expense))
             self.conn.commit()
             self.label.setText("Saved your expenses successfully")
-            self.line3.clear()
+            self.line2.clear()
             self.line.clear()
         else:
             self.label.setText("Enter your expenses information")
@@ -91,8 +91,8 @@ class Finance_app(QWidget):
         sql = self.cursor.fetchall()
         expense_list = []
         if sql:
-            for item_id, item, expense in sql:
-                expense_list.append(f"id : {item_id}---{item} ${expense}")
+            for item_id, item, expense, date in sql:
+                expense_list.append(f"ID : {item_id}---{item} ${expense} : {date}")
             final_expense = "\n".join(expense_list)
             msg = QMessageBox()
             msg.setWindowTitle("fucking broke ass boi")
@@ -122,10 +122,9 @@ class Finance_app(QWidget):
             self.label.setText("Changed your expenses successfully")
             self.conn.commit()
             self.line.clear()
-            self.line2.clear()
+            self.line3.clear()
         else:
             self.label.setText("Enter your expenses information")
-
     def delete_expense(self):
         text = self.line3.text().strip()
         if text:
